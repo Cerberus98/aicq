@@ -1,6 +1,9 @@
 setup.cfg
 setup.py
 aicq/__init__.py
+aicq/blue.py
+aicq/nvplib.py
+aicq/test.py
 aicq.egg-info/PKG-INFO
 aicq.egg-info/SOURCES.txt
 aicq.egg-info/dependency_links.txt

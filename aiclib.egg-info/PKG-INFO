@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: aiclib
+Version: 0.1dev
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: Justin Hammond
+Author-email: justin.hammond@rackspace.com
+License: Apache Software License
+Description: UNKNOWN
+Keywords: kwantum
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 2.7

@@ -1,9 +1,23 @@
+< work thoughts >
+1. create class over aiclib, aicwrapper, that will handle:
+    > loading configurations
+    > multiple controller URIs and fail-over
+    > tenant id information
+2. create wrapper for class that will pretend to be nicera's
+nvplib.py
+3. test to ensure quantumplugin.py can use wrapper
+4. redesign quantumplugin.py or create wrapper over aicwrapper
+that will provide the functionality of nvplib.py and quantum-
+plugin.py
+</work thoughts >
 < nvplib.py > <-- do dis first
 - check default transport zone
 - check tenant
     > Network functions
 - get network (switch)
-- create lswitch 
+- create lswitch
+    appears to be an internal function and should only
+    be called from create_network
 - update network (switch)
 - get all networks (switches for tenant)
     uses tag=<tenantid>&tag_scope=os_tid

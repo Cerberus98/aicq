@@ -1,0 +1,3 @@
+urllib3
+git+file:///Users/jhammond/dev/aiclib@master#egg=aiclib
+git+git://github.rackspace.com/O3Eng/quantum.git@nicira#egg=quantum
