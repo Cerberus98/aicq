@@ -42,7 +42,7 @@ class NvpPlugin(object):
         :raises:
         """
         kwargs["controller"] = self.blue
-        return nvplib.create_networks(tenant_id, net_name, **kwargs)
+        return nvplib.create_network(tenant_id, net_name, **kwargs)
 
     def create_custom_network(self, tenant_id, net_name, transport_zone,
                               controller):
@@ -69,7 +69,7 @@ class NvpPlugin(object):
         nvplib.delete_network(self.controller, netw_id)
 
         LOG.debug("delete_network() completed for tenant: %s" % tenant_id)
-        return {'net-id': netw_id}
+        return {'id': netw_id}
 
     def get_network_details(self, tenant_id, netw_id):
         """
@@ -77,12 +77,12 @@ class NvpPlugin(object):
         are attached to the network.
 
         :returns: a sequence of mappings with the following signature:
-                    {'net-id': uuid that uniquely identifies the
+                    {'id': uuid that uniquely identifies the
                                 particular quantum network
-                     'net-name': a human-readable name associated
+                     'name': a human-readable name associated
                                  with network referenced by net-id
-                     'net-ifaces': ['vif1_on_network_uuid',
-                                    'vif2_on_network_uuid',...,'vifn_uuid']
+                     'ifaces': ['vif1_on_network_uuid',
+                                'vif2_on_network_uuid',...,'vifn_uuid']
                    }
         :raises: exception.NetworkNotFound
         :raises: exception.QuantumException
@@ -105,9 +105,9 @@ class NvpPlugin(object):
             result = nvplib.get_networks(self.blue, switch)
 
         d = {
-                "net-id": netw_id,
-                "net-ifaces": remote_vifs,
-                "net-name": result["display_name"],
+                "id": netw_id,
+                "ifaces": remote_vifs,
+                "name": result["display_name"],
                 "net-op-status": "UP",
             }
         LOG.debug("get_network_details() completed for tenant %s: %s" %
@@ -120,10 +120,10 @@ class NvpPlugin(object):
 
         :returns: a sequence of mappings representing the new network
                     attributes, with the following signature:
-                    {'net-id': uuid that uniquely identifies the
-                                 particular quantum network
-                     'net-name': the new human-readable name
-                                  associated with network referenced by net-id
+                    {'id': uuid that uniquely identifies the
+                           particular quantum network
+                     'name': the new human-readable name
+                             associated with network referenced by net-id
                    }
         :raises: exception.NetworkNotFound
         """
@@ -132,8 +132,8 @@ class NvpPlugin(object):
         result = nvplib.update_network(self.blue, netw_id, **kwargs)
         LOG.debug("update_network() completed for tenant %s" % tenant_id)
         return {
-            "net-id": netw_id,
-            "net-name": result["display_name"],
+            "id": netw_id,
+            "name": result["display_name"],
             "net-op-status": "UP",
         }
 
@@ -143,12 +143,12 @@ class NvpPlugin(object):
         specified Virtual Network.
 
         :returns: a list of mapping sequences with the following signature:
-                     [{'port-id': uuid representing a particular port
-                                    on the specified quantum network
+                     [{'id': uuid representing a particular port
+                               on the specified quantum network
                       },
                        ....
-                       {'port-id': uuid representing a particular port
-                                     on the specified quantum network
+                       {'id': uuid representing a particular port
+                                on the specified quantum network
                       }
                      ]
         :raises: exception.NetworkNotFound
@@ -162,7 +162,7 @@ class NvpPlugin(object):
                                     filters=filters)
 
         for port in lports:
-            ids.append({"port-id": port["uuid"]})
+            ids.append({"id": port["uuid"]})
 
         # Delete from the filter so Quantum doesn't attempt to filter on this
         # too
@@ -179,8 +179,8 @@ class NvpPlugin(object):
         Creates a port on the specified Virtual Network.
 
         :returns: a mapping sequence with the following signature:
-                    {'port-id': uuid representing the created port
-                                   on specified quantum network
+                    {'id': uuid representing the created port
+                              on specified quantum network
                    }
         :raises: exception.NetworkNotFound
         :raises: exception.StateInvalid
@@ -191,7 +191,7 @@ class NvpPlugin(object):
         result = nvplib.create_port(tenant_id, netw_id, port_init_state,
                                     **params)
         d = {
-            "port-id": result["uuid"],
+            "id": result["uuid"],
             "port-op-status": result["port-op-status"],
         }
         LOG.debug("create_port() completed for tenant %s: %s" % (tenant_id, d))
@@ -203,9 +203,9 @@ class NvpPlugin(object):
         specified Virtual Network.
 
         :returns: a mapping sequence with the following signature:
-                    {'port-id': uuid representing the
+                    {'id': uuid representing the
                                  updated port on specified quantum network
-                     'port-state': update port state (UP or DOWN)
+                     'state': update port state (UP or DOWN)
                    }
         :raises: exception.StateInvalid
         :raises: exception.PortNotFound
@@ -217,7 +217,7 @@ class NvpPlugin(object):
         result = nvplib.update_port(netw_id, portw_id, **params)
         LOG.debug("update_port() completed for tenant %s" % tenant_id)
         port = {
-            "port-id": portw_id,
+            "id": portw_id,
             "port_state": result["admin_status_enabled"],
             "port-op-status": result["port-op-status"],
         }
@@ -242,7 +242,7 @@ class NvpPlugin(object):
             raise exception.NetworkNotFound(net_id=netw_id)
         nvplib.delete_port(self.blue, netw_id, portw_id)
         LOG.debug("delete_port() compelted for tenant %s" % tenant_id)
-        return {"port-id": portw_id}
+        return {"id": portw_id}
 
     def get_port_details(self, tenant_id, netw_id, portw_id):
         """
@@ -250,9 +250,9 @@ class NvpPlugin(object):
         that is attached to this particular port.
 
         :returns: a mapping sequence with the following signature:
-                    {'port-id': uuid representing the port on
+                    {'id': uuid representing the port on
                                  specified quantum network
-                     'net-id': uuid representing the particular
+                     'network-id': uuid representing the particular
                                 quantum network
                      'attachment': uuid of the virtual interface
                                    bound to the port, None otherwise
@@ -275,8 +275,8 @@ class NvpPlugin(object):
             vif_uuid = relation["logicalPortAttachment"]["vif_uuid"]
 
         d = {
-            "port-id": portw_id, "attachment": vif_uuid,
-            "net-id": netw_id, "port_state": state,
+            "id": portw_id, "attachment": vif_uuid,
+            "network-id": netw_id, "port_state": state,
             "port-op-status": op_status,
         }
         return d

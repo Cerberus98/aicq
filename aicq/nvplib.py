@@ -73,9 +73,9 @@ def get_all_networks(controller, tenant_id, networks):
     switches = resp['results']
     for switch in switches:
         net_id = switch['uuid']
-        if net_id not in [x['net-id'] for x in networks]:
-            networks.append({"net-id": net_id,
-                             "net-name": switch["display_name"]})
+        if net_id not in [x['id'] for x in networks]:
+            networks.append({"id": net_id,
+                             "name": switch["display_name"]})
     return networks
 
 
@@ -89,7 +89,7 @@ def query_networks(controller, tenant_id, fields="*", tags=None):
     if not resp:
         return []
     switches = resp['results']
-    nets = [{'net-id': switch['uuid'], 'net-name': switch['display_name']} for
+    nets = [{'id': switch['uuid'], 'name': switch['display_name']} for
             switch in switches]
     return nets
 
@@ -120,12 +120,12 @@ def create_network(tenant_id, net_name, **kwargs):
     if isinstance(controller, aicq.blue.Blue):
         blue = controller
     try:
-        net = blue.create_network(tenant_id, net_name, kwargs)
+        net = blue.create_network(tenant_id, net_name, **kwargs)
     except aiclib.nvp.NVPException:
         raise exception.QuantumException()
     d = {}
-    d['net-id'] = net['uuid']
-    d['net-name'] = net['display_name']
+    d['id'] = net['uuid']
+    d['name'] = net['display_name']
     d['net-op-status'] = 'UP'
     return net
 

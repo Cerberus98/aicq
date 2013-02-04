@@ -189,7 +189,7 @@ class Blue(object):
 
     @property
     def default_zone(self):
-        return self._get_connection['default_tz']
+        return self._get_connection()['default_tz']
 
     def _connection_error(self, connection):
         self.conn_error = True

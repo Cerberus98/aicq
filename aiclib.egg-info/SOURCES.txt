@@ -1,8 +1,0 @@
-setup.cfg
-setup.py
-aiclib.egg-info/PKG-INFO
-aiclib.egg-info/SOURCES.txt
-aiclib.egg-info/dependency_links.txt
-aiclib.egg-info/requires.txt
-aiclib.egg-info/top_level.txt
-aiclib.egg-info/zip-safe

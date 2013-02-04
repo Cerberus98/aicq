@@ -1,5 +1,6 @@
 setup.cfg
 setup.py
+aicq/QuantumPlugin.py
 aicq/__init__.py
 aicq/blue.py
 aicq/nvplib.py
