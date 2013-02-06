@@ -66,7 +66,7 @@ class NvpPlugin(object):
         """
         if not nvplib.check_tenant(self.blue, netw_id, tenant_id):
             raise exception.NetworkNotFound(net_id=netw_id)
-        nvplib.delete_network(self.controller, netw_id)
+        nvplib.delete_network(self.blue, netw_id)
 
         LOG.debug("delete_network() completed for tenant: %s" % tenant_id)
         return {'id': netw_id}
